@@ -1,4 +1,4 @@
-```markdown
+
 # Kubernetes Cluster on AWS EC2 - Terraform Deployment
 
 ## Overview
