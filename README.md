@@ -304,65 +304,8 @@ output "worker2_public_ip" {
 
 ---
 *Production-grade K8s cluster ready for Java web applications*
-```
 
-
-
-
-
-
-
-
-
-
-
-
-
-🚀 COMPLETE EXECUTION SEQUENCE
-# On your Ansible control machine (Amazon Linux 2023)
-
-# 1. Verify dynamic inventory
-ansible-inventory -i aws_ec2.yaml --graph
-# Should show: role_masters, role_workers
-
-# 2. CLEANUP everything
-ansible-playbook -i aws_ec2.yaml cleanup.yml --forks 5
-
-# 3. Setup MASTER
-ansible-playbook -i aws_ec2.yaml master.yml
-
-# 4. Setup WORKERS
-ansible-playbook -i aws_ec2.yaml workers.yml
-
-# 5. SSH to MASTER and initialize
-ssh -i ~/.ssh/uma.pem ubuntu@MASTER_PUBLIC_IP
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes-version=1.30.0
-
-# Setup kubectl
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-6. Install CNI + Join Workers
-# On MASTER
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
-
-# Copy join command from kubeadm init output
-# On each WORKER:
-ssh -i ~/.ssh/uma.pem ubuntu@WORKER1_IP
-sudo kubeadm join [JOIN_COMMAND]
-
-7. Verify Production Cluster
-# On MASTER
-kubectl get nodes
-# NAME              STATUS   ROLES           AGE   VERSION
-# master            Ready    control-plane   5m    v1.30.0
-# worker1           Ready    <none>          2m    v1.30.0
-# worker2           Ready    <none>          2m    v1.30.0
-
-kubectl get pods -n kube-system  # All Running
-sudo crictl ps  # containerd ✅ No Docker
--------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 
 ## Complete Ansible Configuration - containerd + K8s 1.30 (Production-Ready)
 
