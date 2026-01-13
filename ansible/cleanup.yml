@@ -1,0 +1,40 @@
+---
+- name: Complete Kubernetes cleanup
+  hosts: all
+  become: yes
+  tasks:
+    - name: Stop all services
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+      loop:
+        - containerd
+        - kubelet
+        - docker
+      ignore_errors: yes
+
+    - name: Remove all K8s files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/kubernetes
+        - /var/lib/etcd
+        - /var/lib/kubelet
+        - /etc/cni/net.d
+        - ~/.kube
+
+    - name: Reset iptables
+      shell: |
+        iptables -F && iptables -t nat -F && iptables -X
+        ipvsadm --clear
+      ignore_errors: yes
+
+    - name: Remove containerd config
+      file:
+        path: /etc/containerd/config.toml
+        state: absent
+
+    - name: kubeadm reset
+      shell: kubeadm reset --force
+      ignore_errors: yes

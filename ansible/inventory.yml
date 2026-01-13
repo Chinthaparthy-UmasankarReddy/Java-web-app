@@ -1,0 +1,15 @@
+all:
+  children:
+    masters:
+      hosts:
+        65.2.182.132:  # MASTER IP
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: /home/ec2-user/.ssh/uma.pem
+    workers:
+      hosts:
+        13.127.209.30:  # Replace with actual worker IPs
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: /home/ec2-user/.ssh/uma.pem
+        13.233.216.95:  # Replace with actual worker IPs
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: /home/ec2-user/.ssh/uma.pem
